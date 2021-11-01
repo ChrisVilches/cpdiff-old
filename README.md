@@ -12,9 +12,9 @@ Compare your program's output to the accepted answer:
 ./your_program < data.in | cpdiff data.out
 ```
 
-<center>
+<p align="center">
   <img src="cpdiff.jpg" width="450"/>
-</center>
+</p>
 
 ## About
 
