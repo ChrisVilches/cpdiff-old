@@ -65,25 +65,47 @@ function getNumbers(line) {
   return line.split(' ').filter(str => str.length > 0).map(str => +str);
 }
 
+function error(msg, err = null) {
+  console.error(`${RESET}${BOLD}Error: ${RESET}${msg}${RESET}`);
+  if (err) {
+    console.error(err);
+  }
+  process.exit(1);
+}
+
+function warn(msg) {
+  console.log(`${RESET}${COLORS.yellow}${msg}${RESET}`);
+}
+
+function log(msg) {
+  console.log(`${RESET}${msg}${RESET}`);
+}
+
+function createSafeReadStream(file) {
+  const stream = fs.createReadStream(file);
+  stream.on("error", err => {
+    error(`File ${file} could not be opened`, err);
+  });
+  return stream;
+}
+
 function createInterfaceReaders() {
   const file1 = process.argv[2];
   const file2 = process.argv[3];
   let input1, input2;
   if (file1 && file2) {
 
-    if(file1 == '-' && file2 == '-'){
-      console.error("Only one input can be stdin");
-      process.exit(1);
+    if (file1 == '-' && file2 == '-') {
+      error('Only one input can be stdin');
     }
 
-    input1 = file1 == '-' ? process.stdin : fs.createReadStream(file1);
-    input2 = file2 == '-' ? process.stdin : fs.createReadStream(file2);
+    input1 = file1 == '-' ? process.stdin : createSafeReadStream(file1);
+    input2 = file2 == '-' ? process.stdin : createSafeReadStream(file2);
   } else if (file1 && !file2) {
     input1 = process.stdin;
-    input2 = fs.createReadStream(file1);
+    input2 = createSafeReadStream(file1);
   } else {
-    console.error('Must specify a file');
-    process.exit(1);
+    error('Must specify a file');
   }
 
   const opt = { console: false };
@@ -121,7 +143,7 @@ function processLinePair(sync = true) {
     case NOT_EQUAL: color = COLORS.red; break;
   }
 
-  console.log(`${color}${line1}\t\t${line2}`);
+  log(`${color}${line1}\t\t${line2}`);
 
   ptr++;
 }
@@ -133,22 +155,27 @@ function processRemainingLines() {
 
 function printSummary() {
   processRemainingLines();
-  console.log(correctAnswers == total ? COLORS.green : COLORS.red);
-  console.log(`${correctAnswers}/${total}`)
-  console.log(`${BOLD}${correctAnswers == total ? 'Accepted' : 'Wrong Answer'}`);
+  const color = correctAnswers == total ? COLORS.green : COLORS.red;
+  log(`${color}${correctAnswers}/${total}`)
+  log(`${color}${BOLD}${correctAnswers == total ? 'Accepted' : 'Wrong Answer'}`);
 
   if (wrongPrecisionWarning > 0) {
-    console.log(`${RESET}${COLORS.yellow}Some floating point numbers may be inaccurate (error used = ${ERR}).`);
+    warn(`Some floating point numbers may be inaccurate (error used = ${ERR}).`);
   }
 
   if (lines1.length != lines2.length) {
-    console.log(`${RESET}${COLORS.yellow}Files have different line count.`);
+    warn(`Files have different line count.`);
   }
-  console.log(RESET);
+}
+
+function exitHandler(code){
+  if(code == 0){
+    printSummary();
+  }
 }
 
 const [interface1, interface2] = createInterfaceReaders();
 interface1.on('line', pushLine(lines1));
 interface2.on('line', pushLine(lines2));
 
-process.on('exit', printSummary.bind(null, { cleanup: true }));
+process.on('exit', exitHandler);
