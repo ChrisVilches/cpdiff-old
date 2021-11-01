@@ -144,6 +144,7 @@ function printSummary() {
   if (lines1.length != lines2.length) {
     console.log(`${RESET}${COLORS.yellow}Files have different line count.`);
   }
+  console.log(RESET);
 }
 
 const [interface1, interface2] = createInterfaceReaders();
