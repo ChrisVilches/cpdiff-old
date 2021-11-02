@@ -81,18 +81,22 @@ function processLinePair(sync) {
         wrongPrecisionWarning++;
     total++;
     var color = function () { };
+    var char;
     switch (comparison) {
         case CompareResult_1.CompareResult.EQUAL:
             color = chalk_1.default.green;
+            char = '  ';
             break;
         case CompareResult_1.CompareResult.CLOSE:
             color = chalk_1.default.yellow;
+            char = '≈ ';
             break;
         case CompareResult_1.CompareResult.NOT_EQUAL:
             color = chalk_1.default.red;
+            char = ' X';
             break;
     }
-    (0, Logger_1.log)(color(line1 + "\t\t" + line2));
+    (0, Logger_1.log)(color(line1 + "\t\t" + char + " " + line2));
     ptr++;
 }
 function processRemainingLines() {
@@ -102,6 +106,7 @@ function processRemainingLines() {
 function printSummary() {
     processRemainingLines();
     var color = correctAnswers == total ? chalk_1.default.green : chalk_1.default.red;
+    (0, Logger_1.log)();
     (0, Logger_1.log)(color(correctAnswers + "/" + total));
     (0, Logger_1.log)(color(chalk_1.default.bold("" + (correctAnswers == total ? 'Accepted' : 'Wrong Answer'))));
     if (wrongPrecisionWarning > 0)

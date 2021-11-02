@@ -12,6 +12,6 @@ export function warn(msg: string) {
   console.log(chalk.yellow(msg));
 }
 
-export function log(msg: string) {
+export function log(msg: string = '') {
   console.log(msg);
 }

@@ -1,2 +1,3 @@
 * Fix columns (sometimes they get deformed if the data is too large).
 * Fix broken unit tests.
+* Add a formatter to the project (currently I use VSCode formatter but it's only local).

@@ -71,14 +71,24 @@ function processLinePair(sync = true): void {
   total++;
 
   let color: Function = () => { };
+  let char: string;
 
   switch (comparison) {
-    case CompareResult.EQUAL: color = chalk.green; break;
-    case CompareResult.CLOSE: color = chalk.yellow; break;
-    case CompareResult.NOT_EQUAL: color = chalk.red; break;
+    case CompareResult.EQUAL:
+      color = chalk.green;
+      char = '  ';
+      break;
+    case CompareResult.CLOSE:
+      color = chalk.yellow;
+      char = '≈ ';
+      break;
+    case CompareResult.NOT_EQUAL:
+      color = chalk.red;
+      char = ' X';
+      break;
   }
 
-  log(color(`${line1}\t\t${line2}`));
+  log(color(`${line1}\t\t${char} ${line2}`));
 
   ptr++;
 }
@@ -91,6 +101,7 @@ function processRemainingLines(): void {
 function printSummary(): void {
   processRemainingLines();
   const color = correctAnswers == total ? chalk.green : chalk.red;
+  log();
   log(color(`${correctAnswers}/${total}`));
   log(color(chalk.bold(`${correctAnswers == total ? 'Accepted' : 'Wrong Answer'}`)));
 

@@ -18,6 +18,7 @@ function warn(msg) {
 }
 exports.warn = warn;
 function log(msg) {
+    if (msg === void 0) { msg = ''; }
     console.log(msg);
 }
 exports.log = log;
