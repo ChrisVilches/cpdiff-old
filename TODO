@@ -1,0 +1,2 @@
+* Fix columns (sometimes they get deformed if the data is too large).
+* Fix broken unit tests.
