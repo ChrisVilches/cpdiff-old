@@ -13,7 +13,7 @@ Compare your program's output to the accepted answer:
 ```
 
 <p align="center">
-  <img src="cpdiff.jpg" width="450"/>
+  <img src="cpdiff.jpg" width="700"/>
 </p>
 
 ## About
