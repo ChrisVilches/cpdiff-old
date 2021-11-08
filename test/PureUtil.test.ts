@@ -25,6 +25,7 @@ describe('PureUtil', function () {
       expect(lineIsRawString('1')).to.be.false;
       expect(lineIsRawString('12')).to.be.false;
       expect(lineIsRawString('-0')).to.be.false;
+      expect(lineIsRawString('0')).to.be.false;
       expect(lineIsRawString('-1')).to.be.false;
       expect(lineIsRawString('-12')).to.be.false;
       expect(lineIsRawString('4 3 2')).to.be.false;
@@ -43,6 +44,7 @@ describe('PureUtil', function () {
     it('gets the numbers correctly', function () {
       expect(getNumbers('1 2 3').map(bigNumToNumber)).to.deep.equal([1, 2, 3]);
       expect(getNumbers('   1  2 3    ').map(bigNumToNumber)).to.deep.equal([1, 2, 3]);
+      expect(getNumbers('  0 0    0   ').map(bigNumToNumber)).to.deep.equal([0, 0, 0]);
       expect(getNumbers('  4').map(bigNumToNumber)).to.deep.equal([4]);
       expect(getNumbers(' -4   ').map(bigNumToNumber)).to.deep.equal([-4]);
       expect(getNumbers('1 2    -4           5.0002 ').map(bigNumToNumber)).to.deep.equal([1, 2, -4, 5.0002]);
@@ -51,6 +53,7 @@ describe('PureUtil', function () {
 
   describe('.compareNumbers', function () {
     it('compares numbers that are the same', function () {
+      expect(compareNumbers(BigNum.listOf([0, 0]), BigNum.listOf([0, 0]))).to.eq(CompareResult.EQUAL);
       expect(compareNumbers(BigNum.listOf([1, 2, 3]), BigNum.listOf([1, 2, 3]))).to.eq(CompareResult.EQUAL);
       expect(compareNumbers(BigNum.listOf([1, 2, 3, 4]), BigNum.listOf([1, 2, 3, 4]))).to.eq(CompareResult.EQUAL);
       expect(compareNumbers(BigNum.listOf([100, -2, 3, 4]), BigNum.listOf([100, -2, 3, 4]))).to.eq(CompareResult.EQUAL);
@@ -87,6 +90,8 @@ describe('PureUtil', function () {
     });
 
     it('compares number strings (equal)', function () {
+      expect(compare('0', '0')).to.eq(CompareResult.EQUAL);
+      expect(compare(' 0  0   ', '0 0')).to.eq(CompareResult.EQUAL);
       expect(compare('1 2 3', '1 2 3')).to.eq(CompareResult.EQUAL);
       expect(compare(' 44.1  55.6  77.8', ' 44.1     55.6    77.8 ')).to.eq(CompareResult.EQUAL);
     });
