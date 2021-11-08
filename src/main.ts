@@ -106,7 +106,7 @@ function printSummary(): void {
   log(color(chalk.bold(`${correctAnswers == total ? 'Accepted' : 'Wrong Answer'}`)));
 
   if (wrongPrecisionWarning > 0)
-    warn(`Some floating point numbers may be inaccurate (error used = ${ERR}).`);
+    warn(`Some floating point numbers may be inaccurate (error used is ${ERR} decimals).`);
 
   if (lines1.length != lines2.length)
     warn(`Files have different line count.`);

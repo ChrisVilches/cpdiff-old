@@ -110,7 +110,7 @@ function printSummary() {
     (0, Logger_1.log)(color(correctAnswers + "/" + total));
     (0, Logger_1.log)(color(chalk_1.default.bold("" + (correctAnswers == total ? 'Accepted' : 'Wrong Answer'))));
     if (wrongPrecisionWarning > 0)
-        (0, Logger_1.warn)("Some floating point numbers may be inaccurate (error used = " + Constants_1.ERR + ").");
+        (0, Logger_1.warn)("Some floating point numbers may be inaccurate (error used is " + Constants_1.ERR + " decimals).");
     if (lines1.length != lines2.length)
         (0, Logger_1.warn)("Files have different line count.");
 }
