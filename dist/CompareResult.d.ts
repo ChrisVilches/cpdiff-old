@@ -1,5 +1,5 @@
 export declare enum CompareResult {
-    EQUAL = 0,
-    NOT_EQUAL = 1,
-    CLOSE = 2
+    EQUAL = "EQUAL",
+    NOT_EQUAL = "NOT_EQUAL",
+    CLOSE = "CLOSE"
 }

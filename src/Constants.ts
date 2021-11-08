@@ -1,1 +1,1 @@
-export const ERR = 0.00001;
+export const ERR = 5; // 1e-5

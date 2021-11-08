@@ -1,1 +1,1 @@
-export declare const ERR = 0.00001;
+export declare const ERR = 5;

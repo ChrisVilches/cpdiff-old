@@ -32,6 +32,10 @@ export class BigNum {
     this.decimal = this.decimal.replace(TRAILING_ZEROS, '');
   }
 
+  static listOf(nums: number[]): BigNum[] {
+    return nums.map(n => new BigNum('' + n));
+  }
+
   isPositive(): boolean {
     return this.positive;
   }
@@ -40,18 +44,17 @@ export class BigNum {
     return this.decimal.length == 0;
   }
 
-  compare(other: BigNum): CompareResult {
+  compare(other: BigNum, errExp: number = 5): CompareResult {
     if (this.isPositive() != other.isPositive()) return CompareResult.NOT_EQUAL;
-    if (this.isInteger() != other.isInteger()) return CompareResult.NOT_EQUAL;
 
-    if (this.isInteger()) {
+    if (this.isInteger() && other.isInteger()) {
       return this.integer == other.integer ? CompareResult.EQUAL : CompareResult.NOT_EQUAL;
     }
 
     if (this.integer != other.integer) return CompareResult.NOT_EQUAL;
 
-    const dec1 = this.firstDecimals(5);
-    const dec2 = other.firstDecimals(5);
+    const dec1 = this.firstDecimals(errExp);
+    const dec2 = other.firstDecimals(errExp);
 
     if (dec1 == dec2 && this.decimal != other.decimal) return CompareResult.CLOSE;
     if (dec1 != dec2) return CompareResult.NOT_EQUAL;

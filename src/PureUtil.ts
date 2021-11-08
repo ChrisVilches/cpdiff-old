@@ -1,32 +1,47 @@
 import { CompareResult } from './CompareResult';
+import { BigNum } from './BigNum';
 import { ERR } from './Constants';
 
 /**
  * Pure functions only.
  */
 
-const NUMBER_REGEX = new RegExp(/-?[0-9]+(.[0-9])*/g);
-
+/**
+ * TODO: Not the best way to do this. The best way would be to throw some exception from
+ * 'getNumbers' and catch it, and when it's caught, the line is processed as a raw string.
+ * This way we can avoid executing the same conversion to BigNum so many times.
+ * (But at least this code fixed all tests. It's just sub optimal performance wise).
+ */
 function lineIsRawString(line: string): boolean {
-  return line.replace(NUMBER_REGEX, '').replace(/\s/g, '').length > 0
+  line = line.trim();
+  try {
+    line.split(' ').filter(str => str.length > 0).map(str => new BigNum(str));
+    return false;
+  } catch {
+  }
+  return true;
 }
 
-function getNumbers(line: string): number[] {
-  return line.split(' ').filter(str => str.length > 0).map(str => +str);
+function getNumbers(line: string): BigNum[] {
+  return line.split(' ').filter(str => str.length > 0).map(str => new BigNum(str));
 }
 
-function compareNumbers(nums1: number[], nums2: number[]): CompareResult {
+function compareNumbers(nums1: BigNum[], nums2: BigNum[]): CompareResult {
   if (nums1.length != nums2.length) return CompareResult.NOT_EQUAL;
 
+  let closeFound = false;
+
   for (let i = 0; i < nums1.length; i++) {
-    if (nums1[i] != nums2[i]) {
-      if (Math.abs(nums1[i] - nums2[i]) < ERR) {
-        return CompareResult.CLOSE;
-      } else {
-        return CompareResult.NOT_EQUAL;
-      }
-    };
+    let comparison: CompareResult = nums1[i].compare(nums2[i], ERR);
+
+    if (comparison == CompareResult.CLOSE) {
+      closeFound = true;
+    } else if (comparison == CompareResult.NOT_EQUAL) {
+      return CompareResult.NOT_EQUAL;
+    }
   }
+
+  if (closeFound) return CompareResult.CLOSE;
   return CompareResult.EQUAL;
 }
 

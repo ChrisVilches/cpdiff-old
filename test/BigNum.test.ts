@@ -24,6 +24,20 @@ describe('BigNum', function () {
     });
   });
 
+  describe('.listOf', function () {
+    it('creates a list correctly', function () {
+      let list1 = BigNum.listOf([1, 2, 3]);
+      expect(list1[0].compare(new BigNum('1'))).to.eq(CompareResult.EQUAL);
+      expect(list1[1].compare(new BigNum('2'))).to.eq(CompareResult.EQUAL);
+      expect(list1[2].compare(new BigNum('3'))).to.eq(CompareResult.EQUAL);
+
+      let list2 = BigNum.listOf([2323.02323, 2123.22, 311.33]);
+      expect(list2[0].compare(new BigNum('2323.02323'))).to.eq(CompareResult.EQUAL);
+      expect(list2[1].compare(new BigNum('2123.22'))).to.eq(CompareResult.EQUAL);
+      expect(list2[2].compare(new BigNum('311.33'))).to.eq(CompareResult.EQUAL);
+    });
+  });
+
   describe('.toString', function () {
     it('converts the number to string correctly', function () {
       expect((new BigNum('34')).toString()).to.eq('34');
@@ -93,7 +107,9 @@ describe('BigNum', function () {
       expect((new BigNum('0.912392371928371923721938712983')).compare(new BigNum('0.912391371928371923721938712983'))).to.eq(CompareResult.CLOSE);
       expect((new BigNum('0.1')).compare(new BigNum('0.10000500'))).to.eq(CompareResult.CLOSE);
       expect((new BigNum('0.100')).compare(new BigNum('0.100001'))).to.eq(CompareResult.CLOSE);
+      expect((new BigNum('123')).compare(new BigNum('123.000001'))).to.eq(CompareResult.CLOSE);
       expect((new BigNum('-123.123401')).compare(new BigNum('-123.1234'))).to.eq(CompareResult.CLOSE);
+      expect((new BigNum('-123.123401')).compare(new BigNum('-123.1231'), 3)).to.eq(CompareResult.CLOSE);
     });
 
     it('compares decimal numbers correctly (not equal)', function () {
@@ -101,6 +117,7 @@ describe('BigNum', function () {
       expect((new BigNum('34.811882381273812739127391237129378123')).compare(new BigNum('34.811873381273812739127391237129378123'))).to.eq(CompareResult.NOT_EQUAL);
       expect((new BigNum('-123.123401')).compare(new BigNum('-123.1234'))).to.eq(CompareResult.CLOSE);
       expect((new BigNum('-123.123401')).compare(new BigNum('-123.12341'))).to.eq(CompareResult.NOT_EQUAL);
+      expect((new BigNum('-123.123401')).compare(new BigNum('-123.1231'), 4)).to.eq(CompareResult.NOT_EQUAL);
     });
   });
 });

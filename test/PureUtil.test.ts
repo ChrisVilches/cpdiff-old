@@ -1,8 +1,11 @@
 import { compare, privateFunctions } from '../src/PureUtil';
 import { CompareResult } from '../src/CompareResult';
 import { expect } from 'chai';
+import { BigNum } from '../src/BigNum';
 
 const { lineIsRawString, getNumbers, compareNumbers } = privateFunctions;
+
+const bigNumToNumber = (bigNum: BigNum): number => +bigNum.toString();
 
 describe('PureUtil', function () {
   describe('.lineIsRawString', function () {
@@ -11,8 +14,10 @@ describe('PureUtil', function () {
       expect(lineIsRawString('x 1 z')).to.be.true;
       expect(lineIsRawString('x 3 2')).to.be.true;
       expect(lineIsRawString(' 00001 ')).to.be.true;
+      expect(lineIsRawString('1212 00001 3434')).to.be.true;
+      expect(lineIsRawString('022 033 044 011 01 02')).to.be.true;
       expect(lineIsRawString(' 011111111111111010102910291219208121802192012 ')).to.be.true;
-      expect(lineIsRawString('01')).to.be.false;
+      expect(lineIsRawString('01')).to.be.true;
     });
 
     it('detects number strings correctly', function () {
@@ -36,34 +41,34 @@ describe('PureUtil', function () {
 
   describe('.getNumbers', function () {
     it('gets the numbers correctly', function () {
-      expect(getNumbers('1 2 3')).to.deep.equal([1, 2, 3]);
-      expect(getNumbers('   1  2 3    ')).to.deep.equal([1, 2, 3]);
-      expect(getNumbers('  4')).to.deep.equal([4]);
-      expect(getNumbers(' -4   ')).to.deep.equal([-4]);
-      expect(getNumbers('1 2    -4           5.0002 ')).to.deep.equal([1, 2, -4, 5.0002]);
+      expect(getNumbers('1 2 3').map(bigNumToNumber)).to.deep.equal([1, 2, 3]);
+      expect(getNumbers('   1  2 3    ').map(bigNumToNumber)).to.deep.equal([1, 2, 3]);
+      expect(getNumbers('  4').map(bigNumToNumber)).to.deep.equal([4]);
+      expect(getNumbers(' -4   ').map(bigNumToNumber)).to.deep.equal([-4]);
+      expect(getNumbers('1 2    -4           5.0002 ').map(bigNumToNumber)).to.deep.equal([1, 2, -4, 5.0002]);
     });
   });
 
   describe('.compareNumbers', function () {
     it('compares numbers that are the same', function () {
-      expect(compareNumbers([1, 2, 3], [1, 2, 3])).to.eq(CompareResult.EQUAL);
-      expect(compareNumbers([1, 2, 3, 4], [1, 2, 3, 4])).to.eq(CompareResult.EQUAL);
-      expect(compareNumbers([100, -2, 3, 4], [100, -2, 3, 4])).to.eq(CompareResult.EQUAL);
+      expect(compareNumbers(BigNum.listOf([1, 2, 3]), BigNum.listOf([1, 2, 3]))).to.eq(CompareResult.EQUAL);
+      expect(compareNumbers(BigNum.listOf([1, 2, 3, 4]), BigNum.listOf([1, 2, 3, 4]))).to.eq(CompareResult.EQUAL);
+      expect(compareNumbers(BigNum.listOf([100, -2, 3, 4]), BigNum.listOf([100, -2, 3, 4]))).to.eq(CompareResult.EQUAL);
     });
 
     it('compares numbers that are similar (within error)', function () {
-      expect(compareNumbers([1, 2.000002, 3], [1, 2.000001, 3])).to.eq(CompareResult.CLOSE);
-      expect(compareNumbers([-1.000012], [-1.000011])).to.eq(CompareResult.CLOSE);
+      expect(compareNumbers(BigNum.listOf([1, 2.000002, 3]), BigNum.listOf([1, 2.000001, 3]))).to.eq(CompareResult.CLOSE);
+      expect(compareNumbers(BigNum.listOf([-1.000012]), BigNum.listOf([-1.000011]))).to.eq(CompareResult.CLOSE);
     });
 
     it('compares numbers that are different', function () {
-      expect(compareNumbers([1, 5], [1, 4])).to.eq(CompareResult.NOT_EQUAL);
-      expect(compareNumbers([1, 5], [2, 5])).to.eq(CompareResult.NOT_EQUAL);
+      expect(compareNumbers(BigNum.listOf([1, 5]), BigNum.listOf([1, 4]))).to.eq(CompareResult.NOT_EQUAL);
+      expect(compareNumbers(BigNum.listOf([1, 5]), BigNum.listOf([2, 5]))).to.eq(CompareResult.NOT_EQUAL);
     });
 
     it('compares numbers that have different array length', function () {
-      expect(compareNumbers([1, 5], [1, 5, 6])).to.eq(CompareResult.NOT_EQUAL);
-      expect(compareNumbers([1, 5], [1])).to.eq(CompareResult.NOT_EQUAL);
+      expect(compareNumbers(BigNum.listOf([1, 5]), BigNum.listOf([1, 5, 6]))).to.eq(CompareResult.NOT_EQUAL);
+      expect(compareNumbers(BigNum.listOf([1, 5]), BigNum.listOf([1]))).to.eq(CompareResult.NOT_EQUAL);
     });
   });
 
@@ -71,11 +76,14 @@ describe('PureUtil', function () {
     it('compares raw strings (equal)', function () {
       expect(compare('a', 'a')).to.eq(CompareResult.EQUAL);
       expect(compare(' a', 'a ')).to.eq(CompareResult.EQUAL);
+      expect(compare(' 01101010110100101010101010100101010100110101010000000001', '   01101010110100101010101010100101010100110101010000000001 ')).to.eq(CompareResult.EQUAL);
     });
 
     it('compares raw strings (not equal)', function () {
       expect(compare('a', 'an')).to.eq(CompareResult.NOT_EQUAL);
       expect(compare(' a', 'an ')).to.eq(CompareResult.NOT_EQUAL);
+
+      expect(compare(' 01101010110100101010101010100101010100110101010000000001', '   01101010110100101010101010100101010100110101010000000011 ')).to.eq(CompareResult.NOT_EQUAL);
     });
 
     it('compares number strings (equal)', function () {
@@ -92,8 +100,8 @@ describe('PureUtil', function () {
     });
 
     it('compares number strings (similar)', function () {
-      expect(compare('1 2  3', '1 2 3.00001')).to.eq(CompareResult.CLOSE);
-      expect(compare(' 4.01   -111.02 666', '  4.01001   -111.02 666 ')).to.eq(CompareResult.CLOSE);
+      expect(compare('1 2  3', '1 2 3.000001')).to.eq(CompareResult.CLOSE);
+      expect(compare(' 4.01   -111.02 666', '  4.010001   -111.02 666 ')).to.eq(CompareResult.CLOSE);
     });
 
     it('compares long number strings (similar)', function () {

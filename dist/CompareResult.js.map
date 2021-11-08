@@ -1,1 +1,1 @@
-{"version":3,"file":"CompareResult.js","sourceRoot":"","sources":["../src/CompareResult.ts"],"names":[],"mappings":";;;AAAA,IAAY,aAIX;AAJD,WAAY,aAAa;IACvB,mDAAK,CAAA;IACL,2DAAS,CAAA;IACT,mDAAK,CAAA;AACP,CAAC,EAJW,aAAa,GAAb,qBAAa,KAAb,qBAAa,QAIxB;AAAA,CAAC"}
+{"version":3,"file":"CompareResult.js","sourceRoot":"","sources":["../src/CompareResult.ts"],"names":[],"mappings":";;;AAAA,IAAY,aAIX;AAJD,WAAY,aAAa;IACvB,gCAAe,CAAA;IACf,wCAAuB,CAAA;IACvB,gCAAe,CAAA;AACjB,CAAC,EAJW,aAAa,GAAb,qBAAa,KAAb,qBAAa,QAIxB;AAAA,CAAC"}
