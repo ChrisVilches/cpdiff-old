@@ -10,14 +10,25 @@ describe('PureUtil', function () {
       expect(lineIsRawString('x y z')).to.be.true;
       expect(lineIsRawString('x 1 z')).to.be.true;
       expect(lineIsRawString('x 3 2')).to.be.true;
+      expect(lineIsRawString(' 00001 ')).to.be.true;
+      expect(lineIsRawString(' 011111111111111010102910291219208121802192012 ')).to.be.true;
+      expect(lineIsRawString('01')).to.be.false;
     });
 
     it('detects number strings correctly', function () {
+      expect(lineIsRawString('0')).to.be.false;
+      expect(lineIsRawString('1')).to.be.false;
+      expect(lineIsRawString('12')).to.be.false;
+      expect(lineIsRawString('-0')).to.be.false;
+      expect(lineIsRawString('-1')).to.be.false;
+      expect(lineIsRawString('-12')).to.be.false;
       expect(lineIsRawString('4 3 2')).to.be.false;
       expect(lineIsRawString('4 334')).to.be.false;
       expect(lineIsRawString('123')).to.be.false;
       expect(lineIsRawString(' 2345 ')).to.be.false;
       expect(lineIsRawString('4.45 22.3')).to.be.false;
+      expect(lineIsRawString('4.45239842347932847238947239400023948234 22.300239420492304923049230492402349023')).to.be.false;
+      expect(lineIsRawString('12830912839128391203213123.12313 9012839128309128312903829138192038192031293213.23')).to.be.false;
       expect(lineIsRawString(' -2345 ')).to.be.false;
       expect(lineIsRawString('-4.45 22.3')).to.be.false;
     });
@@ -72,9 +83,21 @@ describe('PureUtil', function () {
       expect(compare(' 44.1  55.6  77.8', ' 44.1     55.6    77.8 ')).to.eq(CompareResult.EQUAL);
     });
 
+    it('compares long number strings (equal)', function () {
+      expect(compare(' 101000000000000000010000000000', ' 101000000000000000010000000000  ')).to.eq(CompareResult.EQUAL);
+    });
+
+    it('compares long number strings (not equal)', function () {
+      expect(compare(' 101000000000000000010000000000', ' 101000000000000000010000000001  ')).to.eq(CompareResult.NOT_EQUAL);
+    });
+
     it('compares number strings (similar)', function () {
       expect(compare('1 2  3', '1 2 3.00001')).to.eq(CompareResult.CLOSE);
       expect(compare(' 4.01   -111.02 666', '  4.01001   -111.02 666 ')).to.eq(CompareResult.CLOSE);
+    });
+
+    it('compares long number strings (similar)', function () {
+      expect(compare(' 101000000000000000010000000000000123.0001101011', ' 101000000000000000010000000000000123.0001101012')).to.eq(CompareResult.CLOSE);
     });
 
     it('compares number strings (not equal)', function () {
