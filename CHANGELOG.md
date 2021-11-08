@@ -2,7 +2,7 @@
 
 ## 1.0.8 (Released on 2021/11/08)
 
-Huge numbers are now supported. It was implemented using a subset of big float operations. Only comparison was needed.
+Huge numbers are now supported. It was implemented using a subset of big float operations. Only the *comparison* (between two numbers) operation was needed though.
 
 Some examples of what would happen in each case:
 
