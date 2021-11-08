@@ -1,6 +1,6 @@
 {
   "name": "cpdiff",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "File difference tool for competitive programming.",
   "scripts": {
     "test": "mocha -r ts-node/register 'test/**/*.ts'",

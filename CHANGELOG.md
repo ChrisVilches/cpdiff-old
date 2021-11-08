@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.7 (Released on 2021/11/08)
+## 1.0.8 (Released on 2021/11/08)
 
 Huge numbers are now supported. It was implemented using a subset of big float operations. Only comparison was needed.
 
