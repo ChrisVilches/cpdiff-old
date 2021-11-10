@@ -103,6 +103,8 @@ describe('BigNum', function () {
     });
 
     it('compares decimal numbers correctly (similar)', function () {
+      let huge = '-234892349328424324123912831209323948237894723984723984786193813901283091283901234.0000812384093248329048230941872381273812739127391237129378123';
+      expect((new BigNum(huge + '0')).compare(new BigNum(huge + '1'))).to.eq(CompareResult.CLOSE);
       expect((new BigNum('34.811872381273812739127391237129378123')).compare(new BigNum('34.811873381273812739127391237129378123'))).to.eq(CompareResult.CLOSE);
       expect((new BigNum('0.912392371928371923721938712983')).compare(new BigNum('0.912391371928371923721938712983'))).to.eq(CompareResult.CLOSE);
       expect((new BigNum('0.1')).compare(new BigNum('0.10000500'))).to.eq(CompareResult.CLOSE);
@@ -118,6 +120,9 @@ describe('BigNum', function () {
       expect((new BigNum('-123.123401')).compare(new BigNum('-123.1234'))).to.eq(CompareResult.CLOSE);
       expect((new BigNum('-123.123401')).compare(new BigNum('-123.12341'))).to.eq(CompareResult.NOT_EQUAL);
       expect((new BigNum('-123.123401')).compare(new BigNum('-123.1231'), 4)).to.eq(CompareResult.NOT_EQUAL);
+      expect((new BigNum('-124.123401')).compare(new BigNum('-123.123401'), 4)).to.eq(CompareResult.NOT_EQUAL);
+      expect((new BigNum('123.123401')).compare(new BigNum('-123.123401'), 4)).to.eq(CompareResult.NOT_EQUAL);
+      expect((new BigNum('123.0')).compare(new BigNum('133.0'), 4)).to.eq(CompareResult.NOT_EQUAL);
     });
   });
 });
