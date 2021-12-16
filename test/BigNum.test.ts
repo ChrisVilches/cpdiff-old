@@ -112,6 +112,8 @@ describe('BigNum', function () {
       expect((new BigNum('123')).compare(new BigNum('123.000001'))).to.eq(CompareResult.CLOSE);
       expect((new BigNum('-123.123401')).compare(new BigNum('-123.1234'))).to.eq(CompareResult.CLOSE);
       expect((new BigNum('-123.123401')).compare(new BigNum('-123.1231'), 3)).to.eq(CompareResult.CLOSE);
+      expect((new BigNum('0')).compare(new BigNum('0.000000'))).to.eq(CompareResult.CLOSE);
+      expect((new BigNum('0.0')).compare(new BigNum('0.000000'))).to.eq(CompareResult.CLOSE);
     });
 
     it('compares decimal numbers correctly (not equal)', function () {

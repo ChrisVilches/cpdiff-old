@@ -107,6 +107,10 @@ describe('PureUtil', function () {
     it('compares number strings (similar)', function () {
       expect(compare('1 2  3', '1 2 3.000001')).to.eq(CompareResult.CLOSE);
       expect(compare(' 4.01   -111.02 666', '  4.010001   -111.02 666 ')).to.eq(CompareResult.CLOSE);
+      expect(compare('0', '0.000000')).to.eq(CompareResult.CLOSE);
+      expect(compare('0.0', '0.000000')).to.eq(CompareResult.CLOSE);
+      expect(compare('0.0000', '0.0')).to.eq(CompareResult.CLOSE);
+      expect(compare('0.0000', '0')).to.eq(CompareResult.CLOSE);
     });
 
     it('compares long number strings (similar)', function () {
