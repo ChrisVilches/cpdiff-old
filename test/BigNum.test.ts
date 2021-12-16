@@ -51,8 +51,9 @@ describe('BigNum', function () {
     it('checks if the number is integer', function () {
       expect((new BigNum('34')).isInteger()).to.be.true;
       expect((new BigNum('-34')).isInteger()).to.be.true;
-      expect((new BigNum('1.00000000000')).isInteger()).to.be.true;
-      expect((new BigNum('2.0')).isInteger()).to.be.true;
+      expect((new BigNum('1.00000000000')).isInteger()).to.be.false;
+      expect((new BigNum('123123.00000000000')).isInteger()).to.be.false;
+      expect((new BigNum('2.0')).isInteger()).to.be.false;
       expect((new BigNum('34.0001')).isInteger()).to.be.false;
       expect((new BigNum('-34.2')).isInteger()).to.be.false;
       expect((new BigNum('1.0000000000000000000000000000000000000000000000000000000000000000000000001')).isInteger()).to.be.false;
@@ -114,6 +115,7 @@ describe('BigNum', function () {
       expect((new BigNum('-123.123401')).compare(new BigNum('-123.1231'), 3)).to.eq(CompareResult.CLOSE);
       expect((new BigNum('0')).compare(new BigNum('0.000000'))).to.eq(CompareResult.CLOSE);
       expect((new BigNum('0.0')).compare(new BigNum('0.000000'))).to.eq(CompareResult.CLOSE);
+      expect((new BigNum('12')).compare(new BigNum('12.000000'))).to.eq(CompareResult.CLOSE);
     });
 
     it('compares decimal numbers correctly (not equal)', function () {

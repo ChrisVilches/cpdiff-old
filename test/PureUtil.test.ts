@@ -111,6 +111,7 @@ describe('PureUtil', function () {
       expect(compare('0.0', '0.000000')).to.eq(CompareResult.CLOSE);
       expect(compare('0.0000', '0.0')).to.eq(CompareResult.CLOSE);
       expect(compare('0.0000', '0')).to.eq(CompareResult.CLOSE);
+      expect(compare('12', '12.00')).to.eq(CompareResult.CLOSE);
     });
 
     it('compares long number strings (similar)', function () {
