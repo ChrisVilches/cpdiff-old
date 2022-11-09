@@ -46,7 +46,15 @@ cpdiff file1 -
 
 ## More competitive programming tools
 
+### C++ Runner
+
 Try my [C++ runner](https://gist.github.com/ChrisVilches/5f251851e93e45bc9941aa94ec13973d). I use this program to quickly run C++ files as if they were scripts, using the simple `c++ my_program.cpp` command.
+
+### Kattis Scraper
+
+Scrapes the entire Kattis website, downloads all problems and helps you perform complex queries to find interesting problems.
+
+https://github.com/ChrisVilches/Kattis-Scraper
 
 ## Contribution
 
