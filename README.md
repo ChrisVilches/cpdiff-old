@@ -1,5 +1,14 @@
 # cpdiff
 
+**IMPORTANT**
+
+The project was moved (and rewritten in Go) to:
+
+https://github.com/ChrisVilches/cpdiff
+
+------
+
+
 Install using (globally since it's a CLI application):
 
 ```bash
